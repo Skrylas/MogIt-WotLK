@@ -53,6 +53,6 @@ Some items may appear as duplicate entries, but their DisplayID may have a uniqu
 f.ex:  Cataclysm helm vs Cataclysm Headguard  
 
 **My server has custom items, how do I add them?**  
-I would recommend adding any custom items in: [MogIt-WotLK-Custom](https://github.com/Skrylas/MogIt-WotLK-Custom)  
-This is a blank secondary module that can be loaded separately without editing the base MogIt install.  
-Instructions and further details located there.
+You can create a custom module or a new item type under an existing module to store these.  
+Another option is an extra module [MogIt-WotLK-Custom](https://github.com/Skrylas/MogIt-WotLK-Custom), which will load any items added to it to existing modules without needing to edit the base addon. 
+Instructions on adding items and further details located there.

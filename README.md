@@ -49,10 +49,10 @@ f.ex: GM only items are NOT in the database, but Classic Naxxramas, and removed 
 
 **How are item appearences grouped?**   
 Items are grouped by their Model, Texture, Geoset, and Visual enchant. <img src="https://user-images.githubusercontent.com/74335075/113464326-afc51280-93f9-11eb-9bb5-9a7e78c3e2e2.png" align="right" width="25%">   
-Some items may appear as duplicate entries, but their DisplayID may have a unique set of data.  Some helms appear the same, but have different options of showing hair or other appearence options.   
+Some items may appear as duplicate entries, but their DisplayID may have a unique set of data.  Some helms appear the same, but have different options of showing hair or other appearance options.   
 f.ex:  Cataclysm helm vs Cataclysm Headguard  
 
 **My server has custom items, how do I add them?**  
-I would reccomend adding any custom items in: [MogIt-WotLK-Custom](https://github.com/Skrylas/MogIt-WotLK-Custom)  
-This is a blank secondary module that can be loaded seperately without editing the base MogIt install.  
+I would recommend adding any custom items in: [MogIt-WotLK-Custom](https://github.com/Skrylas/MogIt-WotLK-Custom)  
+This is a blank secondary module that can be loaded separately without editing the base MogIt install.  
 Instructions and further details located there.

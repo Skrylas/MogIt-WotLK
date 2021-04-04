@@ -1,4 +1,4 @@
-local i=MogIt.base.AddSlot("Held in Hands",...)
+local i=MogIt.base.AddSlot("Misc",...)
 --
 i(2808,3947,"Torch of Holy Flame",29,1,19,nil,nil,3,1,5,nil,nil,nil,nil)
 i(2901,6264,"Mining Pick",4,1,1,nil,nil,1,2,5,4,nil,nil,nil)

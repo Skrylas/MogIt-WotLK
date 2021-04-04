@@ -37,6 +37,6 @@ Bosses.lua
 Colours.lua
 
 Shield.lua
-Held in Off-Hand.lua
 Cloak.lua
-Held in Hands.lua
+Held in Off-Hand.lua
+Misc.lua

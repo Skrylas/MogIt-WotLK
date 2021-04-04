@@ -288,8 +288,6 @@ function mog.createOptions()
 	config:RegisterOptionsTable("MogIt_Tooltip",options.args.tooltip);
 	dialog:AddToBlizOptions("MogIt_Tooltip",options.args.tooltip.name,MogIt);
 	
-	-- This disables the modules section containing wishlists.
-	-- If other modules are made (custom gear) can reenable this for management.
 	--[[options.args.modules = {
 		type = "group",
 		order = 2,

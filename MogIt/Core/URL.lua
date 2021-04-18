@@ -29,15 +29,17 @@ function mog:ShowURL(id,sub,url,force)
 end
 
 StaticPopupDialogs["MOGIT_URL"] = {
+    preferredIndex = 3,
 	text = "%s%s "..L["URL"],
 	button1 = CLOSE,
 	hasEditBox = 1,
 	maxLetters = 512,
-	editBoxWidth = 260,
+	hasWideEditBox = 1,
+
 	OnShow = function(self,url)
-		self.editBox:SetText(url);
-		self.editBox:SetFocus();
-		self.editBox:HighlightText();
+		self.wideEditBox:SetText(url);
+		self.wideEditBox:SetFocus();
+		self.wideEditBox:HighlightText();
 	end,
 	EditBoxOnEnterPressed = function(self)
 		self:GetParent():Hide();

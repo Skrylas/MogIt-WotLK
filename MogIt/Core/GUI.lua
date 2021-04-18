@@ -1,6 +1,15 @@
 local MogIt,mog = ...;
 local L = mog.L;
 
+local useModel = {
+	[0] = TARGET,
+	[1] = PLAYER,
+}
+
+local myuseModel = UnitIsPlayer("PLAYER")
+mog.playeruseModel = myuseModel;
+mog.displayuseModel = myuseModel
+
 local ModelFramePrototype = CreateFrame("Button")
 local ModelFrame_MT = {__index = ModelFramePrototype}
 
@@ -244,7 +253,14 @@ function ModelFramePrototype:ResetModel()
 	local model = self.model;
 	model:SetPosition(0, 0, 0);
 	local info = self.type == "preview" and self.parent.data or mog;
-	model:Dress();
+	-- :Dress resets the custom race, and :SetCustomRace does :Dress, so if we're using a custom race, just :SetCustomRace again instead of :Dress
+	if info.displayuseModel == myuseModel then
+		model:SetUnit("PLAYER");
+		model:Dress()
+	elseif UnitIsPlayer("TARGET") then
+		model:SetUnit("TARGET");
+		model:Dress();
+	end				 
 	self:PositionModel();
 end
 
@@ -337,6 +353,14 @@ end
 
 
 --// Scroll Frame
+local updater = CreateFrame("Frame");
+updater:Hide();
+updater:SetScript("OnUpdate", function(self)
+	self:Hide();
+	mog:UpdateScroll();
+	mog.doModelUpdate = nil;
+end);
+
 mog.scroll = CreateFrame("Slider","MogItScroll",mog.frame,"UIPanelScrollBarTrimTemplate");
 mog.scroll:Hide();
 mog.scroll:SetPoint("TOPRIGHT",mog.frame.Inset,"TOPRIGHT",1,-17);
@@ -438,6 +462,11 @@ function mog.scroll.update(self, value, offset, onscroll)
 	else
 		mog.frame.page:Hide();
 	end
+	
+	-- incorrect models may be tried on when items aren't cached, this queues another update if uncached items were found
+	if mog.doModelUpdate then
+		updater:Show();
+	end					
 end
 
 mog.frame:SetScript("OnMouseWheel", function(self, offset)
@@ -641,6 +670,17 @@ local function setDisplayModel(self, arg1, value)
 	CloseDropDownMenus(1);
 end
 
+function mog:CreateuseModelMenu(dropdown, level, func, selecteduseModel)
+	for i = 0, 1 do
+		local info = UIDropDownMenu_CreateInfo();
+		info.text = useModel[i];
+		info.func = func;
+		info.checked = selecteduseModel == i;
+		info.arg1 = "displayuseModel";
+		info.arg2 = i;
+		dropdown:AddButton(info, level);
+	end
+end
 local dressOptions = {
 	none = NONE,
 	preview = L["Preview"],
@@ -681,10 +721,10 @@ mog.menu.catalogue = mog.menu:CreateMenu(L["Catalogue"], function(self, tier)
 		info.hasArrow = true;
 		info.disabled = not (mog.active and mog.active.sorting and #mog.active.sorting > 0);
 		UIDropDownMenu_AddButton(info,tier);
-		
+			
 		local info = UIDropDownMenu_CreateInfo();
-		info.text = L["Weapon enchant"];
-		info.value = "weaponEnchant";
+		info.text = "Use Model";
+		info.value = "useModel";
 		info.notCheckable = true;
 		info.hasArrow = true;
 		UIDropDownMenu_AddButton(info,tier);
@@ -695,6 +735,14 @@ mog.menu.catalogue = mog.menu:CreateMenu(L["Catalogue"], function(self, tier)
 		info.notCheckable = true;
 		info.hasArrow = true;
 		UIDropDownMenu_AddButton(info,tier);
+		
+		local info = UIDropDownMenu_CreateInfo();
+		info.text = L["Weapon enchant"];
+		info.value = "weaponEnchant";
+		info.notCheckable = true;
+		info.hasArrow = true;
+		UIDropDownMenu_AddButton(info,tier);
+		
 	elseif self.tier[2] == "sorting" then
 		if tier == 2 then
 			if mog.active and mog.active.sorting then
@@ -707,6 +755,8 @@ mog.menu.catalogue = mog.menu:CreateMenu(L["Catalogue"], function(self, tier)
 		elseif self.tier[3] and self.tier[3].Dropdown then
 			self.tier[3].Dropdown(mog.active,tier);
 		end
+	elseif self.tier[2] == "useModel" then
+		mog:CreateuseModelMenu(self, tier, setDisplayModel, mog.displayuseModel)
 	elseif self.tier[2] == "weaponEnchant" then
 		if tier == 2 then
 			local info = UIDropDownMenu_CreateInfo();

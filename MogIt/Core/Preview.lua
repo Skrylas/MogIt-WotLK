@@ -162,6 +162,12 @@ end
 
 local previewMenu = {
 	{
+		text = "Use Model",
+		value = "useModel",
+		notCheckable = true,
+		hasArrow = true,
+	},
+	{
 		text = L["Weapon enchant"],
 		value = "weaponEnchant",
 		notCheckable = true,
@@ -203,6 +209,7 @@ local previewMenu = {
 				mog.view.DelItem(k, currentPreview);
 				local slotID = GetInventorySlotInfo(k);
 				local item = GetInventoryItemID("player", slotID) --mog.mogSlots[slotID] and select(6, GetTransmogrifySlotInfo(slotID)) or
+--				print(item)
 				if (k ~= "HeadSlot" or ShowingHelm()) and (k ~= "BackSlot" or ShowingCloak()) then
 					mog.view.AddItem(item, currentPreview);
 				end
@@ -211,6 +218,25 @@ local previewMenu = {
 				mog.scroll:update();
 			end
 		end,
+	},
+	{
+		text = "Equip target's gear",
+		func = function(self)
+			for k, v in pairs(currentPreview.slots) do
+				mog.view.DelItem(k, currentPreview);
+				NotifyInspect("target")
+				local slotID = GetInventorySlotInfo(k);
+				local item = GetInventoryItemID("target", slotID) --mog.mogSlots[slotID] and select(6, GetTransmogrifySlotInfo(slotID)) or
+--				print(item)
+				if (k ~= "HeadSlot" or ShowingHelm()) and (k ~= "BackSlot" or ShowingCloak()) then
+					mog.view.AddItem(item, currentPreview);
+				ClearInspectPlayer()
+				end
+			end
+			if mog.activePreview == currentPreview and mog.db.profile.gridDress == "preview" then
+				mog.scroll:update();
+			end
+		end,				
 	},
 	{
 		text = L["Clear"],
@@ -231,6 +257,8 @@ local function previewInitialize(self, level)
 		for i, info in ipairs(previewMenu) do
 			UIDropDownMenu_AddButton(info, level);
 		end
+	elseif self.tier[2] == "useModel" then
+		mog:CreateuseModelMenu(self, level, setDisplayModel, self.parent.data.displayuseModel)							   																			
 	elseif self.tier[2] == "weaponEnchant" then
 		if level == 2 then
 			local info = UIDropDownMenu_CreateInfo();
@@ -394,7 +422,9 @@ local function initPreview(frame, id)
 	frame:SetPoint(props.point, props.x, props.y);
 	frame:SetSize(props.w, props.h);
 	frame.TitleText:SetText(L["Preview %d"]:format(id));
-	frame.data = {}
+	frame.data = {
+		displayuseModel = mog.playeruseModel,
+	};							   
 end
 
 mog.previews = {};

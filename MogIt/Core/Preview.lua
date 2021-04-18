@@ -3,6 +3,7 @@ local L = mog.L;
 
 local LBI = LibStub("LibBabble-Inventory-3.0"):GetUnstrictLookupTable();
 
+local TITANS_GRIP_SPELLID = 46917								 
 
 mog.view = CreateFrame("Frame","MogItPreview",UIParent);
 mog.view:SetAllPoints();
@@ -74,7 +75,7 @@ local function resizeOnMouseUp(self)
 	end
 end
 
-local function modelOnMouseWheel(self,v)
+local function modelOnMouseWheel(self, v)
 	local delta = ((v > 0 and 0.6) or -0.6);
 	if mog.db.profile.sync then
 		mog.posZ = mog.posZ + delta;
@@ -90,7 +91,7 @@ local function modelOnMouseWheel(self,v)
 	end
 end
 
-local function slotTexture(f,slot,texture)
+local function slotTexture(f, slot, texture)
 	f.slots[slot].icon:SetTexture(texture or select(2,GetInventorySlotInfo(slot)));
 end
 
@@ -123,8 +124,10 @@ end
 local function previewOnClose(self)
 	if mog.db.profile.singlePreview then
 		mog.view:Hide();
-	else
+	elseif mog.db.profile.previewConfirmClose then
 		StaticPopup_Show("MOGIT_PREVIEW_CLOSE", nil, nil, self:GetParent());
+	else
+		mog:DeletePreview(self:GetParent());
 	end
 end
 
@@ -334,6 +337,7 @@ end
 
 --// Load Menu
 local function onClick(self, set, profile)
+	mog.view:Undress(currentPreview);
 	mog:AddToPreview(mog.wishlist:GetSetItems(set, profile), currentPreview)
 	CloseDropDownMenus()
 end
@@ -626,15 +630,22 @@ function mog:SetPreviewFixedSize(isFixedSize)
 	UpdateUIPanelPositions(MogItPreview1);
 end
 
+local cachedPreviews;
 local doCache = {};
 mog:AddItemCacheCallback("PreviewAddItem", function()
+	cachedPreviews = {};					 
 	for i = #doCache, 1, -1 do
 		local item = doCache[i]
 		if GetItemInfo(item.id) then
+			cachedPreviews[item.frame] = true;									 
 			mog.view.AddItem(item.id, item.frame);
 			tremove(doCache, i)
 		end
 	end
+	-- update the grid if using preview grid dress, and an item was cached on the active preview
+	if mog.db.profile.gridDress == "preview" and cachedPreviews[mog.activePreview] then
+		mog:UpdateScroll();
+	end																							 
 end)
 
 local function additem(item, preview, forceSlot, subType, invType, texture)
@@ -645,7 +656,7 @@ local function additem(item, preview, forceSlot, subType, invType, texture)
 	if slot then
 		if slot == "MainHandSlot" or slot == "SecondaryHandSlot" then
 			if invType == "INVTYPE_2HWEAPON" then
-				if IsSpellKnown(46917) then
+				if IsSpellKnown(TITANS_GRIP_SPELLID) then
 					-- Titan's Grip exists in the spellbook, so we can treat this weapon as one handed
 					invType = "INVTYPE_WEAPON";
 				end
@@ -789,6 +800,11 @@ tinsert(ModifiedItemClickHandlers, function(link)
 		-- if it's a dressup modified click and a dressable item, intercept the call here and let SetItemRef hook handle it
 		return link and IsDressableItem(link);
 	end
+	local _, staticPopup = StaticPopup_Visible("MOGIT_PREVIEW_ADDITEM");
+	if IsModifiedClick("CHATLINK") and staticPopup then
+		staticPopup.editBox:SetText(link);
+	return true	
+	end	
 end);
 
 hooksecurefunc("SetItemRef", function(link, text, button, chatFrame)

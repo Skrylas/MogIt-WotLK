@@ -162,18 +162,7 @@ local itemOptionsMenu = {
 	{
 		wishlist = true,
 		text = L["Delete"],
-		func = function(self, set)
--- Replaced this with Cata functionality for now.
---[[			if set.name then
-				local slot = mog.wishlist:DeleteItem(self.value, set.name)
-				if slot then
-					set.frame.model:UndressSlot(GetInventorySlotInfo(slotID))
-				end
-			else
-				mog.wishlist:DeleteItem(self.value)
-				mog:BuildList(nil, "Wishlist")
-			end 
-]]--		
+		func = function(self, set)	
 			mog.wishlist:DeleteItem(self.value, set.name)
 			mog:BuildList(nil, "Wishlist")	
 			CloseDropDownMenus()

@@ -1,3 +1,6 @@
+v1.5a 04/19/2021
+- Hotfix: Removed Datastore functionality for now.
+--------------------------------------------------------------------------------------------------------
 v1.5 04/18/2021
 - Widened link textbox
 - Added ability to use target's model or gear.

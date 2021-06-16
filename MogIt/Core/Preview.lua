@@ -233,7 +233,9 @@ local previewMenu = {
 --				print(item)
 				if (k ~= "HeadSlot" or ShowingHelm()) and (k ~= "BackSlot" or ShowingCloak()) then
 					mog.view.AddItem(item, currentPreview);
-				ClearInspectPlayer()
+					if not ( InspectFrame and InspectFrame:IsVisible() ) then	
+						ClearInspectPlayer()
+					end
 				end
 			end
 			if mog.activePreview == currentPreview and mog.db.profile.gridDress == "preview" then

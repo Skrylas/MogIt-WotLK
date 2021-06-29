@@ -4,6 +4,7 @@
 
 <Script file="Sorting.lua"/>
 
+<Script file="alpha.lua"/>
 <Script file="level.lua"/>
 <Script file="itemLevel.lua"/>
 <Script file="display.lua"/>

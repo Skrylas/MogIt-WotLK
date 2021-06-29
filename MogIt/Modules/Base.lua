@@ -253,6 +253,7 @@ for _, addon in ipairs(addons) do
 			sorting = {
 				"level",
 				"itemLevel",
+				"alpha",
 				"display",
 				"id",				
 				"colour",

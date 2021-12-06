@@ -63,7 +63,8 @@ local function resizeOnMouseDown(self)
 end
 
 local function resizeOnMouseUp(self)
-	if mog.db.profile.singlePreview and mog.db.profile.previewUIPanel and mog.db.profile.previewFixedSize then return end
+	--if mog.db.profile.singlePreview and mog.db.profile.previewUIPanel and mog.db.profile.previewFixedSize then return end
+	if mog.db.profile.singlePreview and mog.db.profile.previewUIPanel then return end
 	local f = self:GetParent();
 	f:StopMovingOrSizing();
 	local frameProps = mog.db.profile.previewProps[f:GetID()];
@@ -616,10 +617,10 @@ function mog:SetPreviewUIPanel(isUIPanel)
 		MogItPreview1:ClearAllPoints();
 		MogItPreview1:SetPoint(point, x, y);
 	end
-	mog:SetPreviewFixedSize(mog.db.profile.previewFixedSize);
+	--mog:SetPreviewFixedSize(mog.db.profile.previewFixedSize);
 end
 
-function mog:SetPreviewFixedSize(isFixedSize)
+--[[function mog:SetPreviewFixedSize(isFixedSize)
 	local isUIPanel = mog.db.profile.previewUIPanel;
 	if isFixedSize and isUIPanel then
 		MogItPreview1:SetSize(PANEL_DEFAULT_WIDTH, PANEL_DEFAULT_HEIGHT);
@@ -630,7 +631,7 @@ function mog:SetPreviewFixedSize(isFixedSize)
 	if not (isUIPanel and isFixedSize) then MogItPreview1.resize:Show() else MogItPreview1.resize:Hide() end
 	--MogItPreview1.resize:SetShown(not ());
 	UpdateUIPanelPositions(MogItPreview1);
-end
+end]]--
 
 local cachedPreviews;
 local doCache = {};

@@ -28,9 +28,9 @@ function mog.createOptions()
 			end
 		else
 			mog.db.profile[info.arg] = value;
-			if info.arg == "tooltipRotate" then
-				mog.tooltip.rotate:SetShown(value);
-			elseif info.arg == "sortWishlist" then
+		--	if info.arg == "tooltipRotate" then
+		--		mog.tooltip.rotate:SetShown(value);
+			if info.arg == "sortWishlist" then
 				mog:BuildList(nil, "Wishlist");
 			elseif info.arg == "singlePreview" then
 				mog:SetSinglePreview(value);
@@ -191,13 +191,13 @@ function mog.createOptions()
 				width = "double",
 				arg = "tooltipMouse",
 			},
-			rotate = {
+		--[[	rotate = {
 				type = "toggle",
 				order = 4,
 				name = L["Auto rotate"],
 				width = "full",
 				arg = "tooltipRotate",
-			},
+			},]]--
 			width = {
 				type = "range",
 				order = 5,
@@ -226,7 +226,7 @@ function mog.createOptions()
 			modifier = {
 				type = "select",
 				order = 8,
-				name = L["Only show if modifier is pressed"],
+				name = L["Only show if modifier is pressed. \nKey does not need to be held."],
 				values = function()
 					local tbl = {
 						None = "None",

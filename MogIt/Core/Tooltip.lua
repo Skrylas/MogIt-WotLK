@@ -99,8 +99,9 @@ function mog.tooltip.ShowItem(self)
 					end
 				end
 				local slot = select(9,GetItemInfo(itemLink));
-				if (not db.tooltipMog ) and tooltip.slots[slot] and IsDressableItem(itemLink) then
-					tooltip.model:SetFacing(tooltip.slots[slot]-(db.tooltipRotate and 0.5 or 0));
+				if tooltip.slots[slot] and IsDressableItem(itemLink) then
+					--tooltip.model:SetFacing(tooltip.slots[slot]-(db.tooltipRotate and 0.5 or 0));
+					tooltip.model:SetFacing(tooltip.slots[slot]);
 					tooltip:Show();
 					tooltip.owner = self;
 					--if mog.global.tooltipAnchor then

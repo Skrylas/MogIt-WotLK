@@ -28,7 +28,7 @@ function mog:GetItemLabel(itemID, callback, includeIcon, iconSize)
 	-- Uncached items will revert to local database and show an asterisk next to them.  Non-existent items will not show an icon.
 	-- GetItemInfo requires the item to be in the cache.  GetItemIcon does not.
 	return (includeIcon and "|T"..GetItemIcon(itemID)..":"..(iconSize or "32") .."|t" or "")..
-			(name and "|cff"..itemQualityColor[quality].." "..name .."|r" or itemname and "|cff"..itemQualityColor[itemquality].." "..itemname .."|r"..RED_FONT_COLOR_CODE.."*" )
+			(name and "|cff"..itemQualityColor[quality].." "..name .."|r" or itemname and "|cff"..itemQualityColor[itemquality].." "..itemname .."|r"..RED_FONT_COLOR_CODE.."*" or RED_FONT_COLOR_CODE..RETRIEVING_ITEM_INFO..FONT_COLOR_CODE_CLOSE)
 end
 
 local function addTooltipDoubleLine(textLeft, textRight)
